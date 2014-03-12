@@ -18,7 +18,7 @@ namespace GeminiProcessor
 
         public void nextInstruction()
         {
-            programCounter++;//ssff
+            programCounter++;
         }
 
     }
