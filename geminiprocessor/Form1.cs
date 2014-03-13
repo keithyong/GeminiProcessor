@@ -14,6 +14,8 @@ namespace GeminiProcessor
     public partial class Form1 : Form
     {
         CPU myCPU;
+        IPE myIPE;
+
 
         public Form1()
         {
@@ -38,8 +40,10 @@ namespace GeminiProcessor
                 {
                     try
                     {
-                        var ipe = new IPE(openFileDialog1.FileName);
-                        ipe.Parse();
+                        myIPE = new IPE(openFileDialog1.FileName);
+                        myIPE.Parse();
+                        myCPU.readFile(myIPE.getFileName());
+
                         RunButton.Enabled = true;
                     }
                     catch (Exception ex)
@@ -53,13 +57,15 @@ namespace GeminiProcessor
 
         private void RunButton_Click(object sender, EventArgs e)
         {
-            myCPU.nextInstruction();
-
+            foreach (KeyValuePair<int, int> k in myIPE.binaries)
+            {
+                myCPU.nextInstruction();
+            }
         }
 
         private void NextInstructionButton_Click(object sender, EventArgs e)
         {
-            
+            myCPU.nextInstruction();
         }
 
         public void CPU_Done()
