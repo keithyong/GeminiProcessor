@@ -43,7 +43,6 @@ namespace GeminiProcessor
                         myIPE = new IPE(openFileDialog1.FileName);
                         myIPE.Parse();
                         myCPU.readFile(myIPE.getFileName());
-
                         RunButton.Enabled = true;
                     }
                     catch (Exception ex)

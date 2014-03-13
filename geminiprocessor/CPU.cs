@@ -21,31 +21,19 @@ namespace GeminiProcessor
 
         public void readFile(string fileName)
         {
+            int currentInstruction;
 
-            float aspectRatio;
-            string tempDirectory;
-            int autoSaveTime;
-            bool showStatusBar;
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Found binary file " + fileName);
 
-            if (File.Exists(fileName))
+            using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
             {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("Found binary file " + fileName);
-
-                using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
-                {
-                    aspectRatio = reader.ReadSingle();
-                    tempDirectory = reader.ReadString();
-                    autoSaveTime = reader.ReadInt32();
-                    showStatusBar = reader.ReadBoolean();
-                }
+                currentInstruction = reader.ReadInt32();
+                Console.WriteLine(currentInstruction);
             }
-            else
-            {
-                Console.WriteLine("FILE NO FOUND");
-            }
+            
         }
         public void nextInstruction()
         {
