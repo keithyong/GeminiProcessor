@@ -9,9 +9,9 @@ namespace GeminiProcessor
 {
     public class CPU
     {
-        Dictionary<int, int> instructions;
         private int programCounter;
         private int accumulator;
+        Memory mem = new Memory();
         
         
         public CPU()
@@ -30,8 +30,15 @@ namespace GeminiProcessor
 
             using (BinaryReader reader = new BinaryReader(File.Open(fileName, FileMode.Open)))
             {
-                currentInstruction = reader.ReadInt32();
-                Console.WriteLine(currentInstruction);
+                while (reader.BaseStream.Position != reader.BaseStream.Length)
+                {
+                    mem.instructions.Add(reader.ReadUInt32());
+                }
+            }
+
+            foreach (UInt32 x in mem.instructions)
+            {
+                Console.WriteLine(x);
             }
             
         }

@@ -54,6 +54,7 @@
     <Compile Include="..\..\..\Desktop\IPE.cs">
       <Link>IPE.cs</Link>
     </Compile>
+    <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
