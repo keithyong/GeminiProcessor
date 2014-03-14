@@ -21,6 +21,7 @@ namespace GeminiProcessor
         {
             InitializeComponent();
             RunButton.Enabled = false;
+            NextInstructionButton.Enabled = false;
             myCPU = new CPU();
 
         }
@@ -44,11 +45,14 @@ namespace GeminiProcessor
                         myIPE.Parse();
                         myCPU.readFile(myIPE.getFileName());
                         RunButton.Enabled = true;
+                        NextInstructionButton.Enabled = true;
+                        NextInstructionNumLabel.Text = Convert.ToString(myCPU.getNextInstruction(), 2);
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                         RunButton.Enabled = false;
+                        NextInstructionButton.Enabled = false;
                     }
                 }
             }
@@ -56,19 +60,40 @@ namespace GeminiProcessor
 
         private void RunButton_Click(object sender, EventArgs e)
         {
-            foreach (KeyValuePair<int, int> k in myIPE.binaries)
+            while (myCPU.isCPUDone() == false)
             {
-                myCPU.nextInstruction();
+                clickInstructionButton();
             }
         }
 
         private void NextInstructionButton_Click(object sender, EventArgs e)
         {
-            myCPU.nextInstruction();
+            clickInstructionButton();
         }
 
-        public void CPU_Done()
+        private void clickInstructionButton()
         {
+            if (myCPU.isCPUDone() == false)
+            {
+                myCPU.nextInstruction();
+                PCNumLabel.Text = Convert.ToString(myCPU.getProgramCounter());
+                ACCNumLabel.Text = Convert.ToString(myCPU.getAccumulator());
+                refreshNextInstructionLabel();
+                refreshInstructionIndex();
+            }
+            else
+            {
+                NextInstructionButton.Enabled = false;
+            }
+        }
+
+        private void refreshNextInstructionLabel()
+        {
+            NextInstructionNumLabel.Text = Convert.ToString(myCPU.getNextInstruction(), 2);
+        }
+        private void refreshInstructionIndex()
+        {
+            instructionIndexLabel.Text = myCPU.getProgramCounter() + " / " + myCPU.getLengthOfInstructions();
         }
 
         private void AccLabel_Click(object sender, EventArgs e)
@@ -82,6 +107,11 @@ namespace GeminiProcessor
         }
 
         private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OneNumLabel_Click(object sender, EventArgs e)
         {
 
         }
