@@ -100,7 +100,7 @@ namespace GeminiProcessor
                     String labelToAdd = labelMatch.Value;
                     int indexOfLabel = lineIndex + 1;
                     labels.Add(labelToAdd, indexOfLabel);
-                    Console.WriteLine("0 LabelMatched: " + labelToAdd + " to the labels dictionary with index " + indexOfLabel);
+                    Console.WriteLine("LabelMatched: " + labelToAdd + " to the labels dictionary with index " + indexOfLabel);
                 }
                 else if (branchMatch.Success)
                 {

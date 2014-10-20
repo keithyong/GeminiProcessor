@@ -14,7 +14,7 @@ namespace GeminiProcessor
         public List<UInt32> instructions = new List<UInt32>();
 
         const int inputCacheSize = 8;
-        const int setAssociative = 2; // 1 way or 2 way
+        const int setAssociative = 1; // 1 way or 2 way
         const int cacheSize = inputCacheSize / setAssociative;
         const int blockSize = 2;
         BlockSet[] cache = new BlockSet[cacheSize];
@@ -52,6 +52,11 @@ namespace GeminiProcessor
 
                 currentBlockSet = cache[cacheIndex];
                 
+
+                Console.WriteLine("--Trying to get stack[{0}]--", i);
+                Console.WriteLine("blockNumber = {0}, cacheIndex = {1}, blockIndex = {2}", blockNumber, cacheIndex, randomBlockIndex, dataIndex, currentTag);
+                Console.WriteLine("dataIndex = {0}, currentTag = {1}, validBit = {2}", dataIndex, currentTag, cache[cacheIndex].getValidBit());
+
                 bool hit = false;
                 int hitIndex = 0;
 
@@ -73,31 +78,25 @@ namespace GeminiProcessor
 
                 if (hit == true)
                 {
-                    //HIT - simply return data
+                    //HIT
+                    Console.WriteLine("HIT! Got data: {0}", currentBlockSet[hitIndex][dataIndex]);
                     hits++;
                     return currentBlockSet[hitIndex][dataIndex];
                 }
                 else
                 {
-                    //MISS - write data to random block within blockset
-                    int[] newBlockData = currentBlockSet[randomBlockIndex];
+                    //MISS
+                    int[] newBlockData = currentBlockSet[hitIndex];
                     newBlockData[dataIndex] = stack[i];
-
-                    //If current block to be replaced is dirty, then write it to the stack
-                    if (cache[cacheIndex].getDirty(randomBlockIndex) == true)
-                    {
-                        for (int index = 0; index < blockSize; index++)
-                        {
-                            stack[index] = cache[cacheIndex][randomBlockIndex][index];
-                        }
-                    }
-
                     cache[cacheIndex][randomBlockIndex] = newBlockData; //Random Replacement
                     cache[cacheIndex].setTag(randomBlockIndex, currentTag);
                     cache[cacheIndex].setValidBit(true); //Set valid bit of the BlockSet to be true
+                    Console.WriteLine("MISS! Got data: {0}", cache[cacheIndex][randomBlockIndex][dataIndex]);
                     misses++;
                     return cache[cacheIndex][randomBlockIndex][dataIndex];
                 }
+                //If the current tag is the same as the tag in the cache, then it's a hit
+
             }
             set
             {
